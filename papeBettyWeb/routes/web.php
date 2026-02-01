@@ -34,6 +34,18 @@ Route::get('/pagos', function(){
     return Inertia::render('Pagos');
 })->middleware(['auth', 'verified'])->name('pagos');
 
+Route::get('/store', function(){
+    return Inertia::render('Store');
+})->middleware(['auth', 'verified'])->name('store');
+
+Route::get('/reportes', function(){
+    return Inertia::render('Reportes');
+})->middleware(['auth', 'verified'])->name('reportes');
+
+Route::get('/clientes', function(){
+    return Inertia::render('Clientes');
+})->middleware(['auth','verified'])->name('clientes');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
