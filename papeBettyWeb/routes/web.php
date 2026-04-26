@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,12 +20,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/inventario', function(){
-    return Inertia::render('Inventario');
+    $productos = App\Models\Producto::all();
+    return Inertia::render('Inventario', ['productos' => $productos]);
 })->middleware(['auth', 'verified'])->name('inventario');
 
-Route::get('/productos', function(){
-    return Inertia::render('Productos');
-})->middleware(['auth', 'verified'])->name('productos');
+Route::get('/productos', [ProductoController::class, 'index'])->middleware(['auth', 'verified'])->name('productos');
+Route::post('/productos', [ProductoController::class, 'store'])->middleware(['auth', 'verified'])->name('productos.store');
+Route::post('/productos/{producto}', [ProductoController::class, 'update'])->middleware(['auth', 'verified'])->name('productos.update');
+Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])->middleware(['auth', 'verified'])->name('productos.destroy');
 
 Route::get('/area-impresion', function(){
     return Inertia::render('AreaImpresion');
