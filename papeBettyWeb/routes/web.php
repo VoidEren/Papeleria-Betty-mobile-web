@@ -46,7 +46,8 @@ Route::get('/reportes', function(){
 })->middleware(['auth', 'verified'])->name('reportes');
 
 Route::get('/clientes', function(){
-    return Inertia::render('Clientes');
+    $clientes = App\Models\User::where('is_mobile_app', true)->get();
+    return Inertia::render('Clientes', ['clientes' => $clientes]);
 })->middleware(['auth','verified'])->name('clientes');
 
 

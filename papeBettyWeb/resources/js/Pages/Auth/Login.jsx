@@ -31,7 +31,12 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
+            <div className="mb-10 text-center">
+                <h2 className="text-2xl font-light tracking-tight text-gray-900">Iniciar sesión</h2>
+                <p className="mt-2 text-sm text-gray-500">Bienvenido de nuevo a Papelería Betty</p>
+            </div>
+
+            <form onSubmit={submit} className="space-y-6">
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -49,7 +54,7 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
+                <div>
                     <InputLabel htmlFor="password" value="Password" />
 
                     <TextInput
@@ -65,7 +70,7 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4 block">
+                <div className="flex items-center justify-between">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
@@ -74,25 +79,27 @@ export default function Login({ status, canResetPassword }) {
                                 setData('remember', e.target.checked)
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
+                        <span className="ms-2 text-sm text-gray-500">
+                            Recordarme
                         </span>
                     </label>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                <div className="flex flex-col space-y-4 pt-4">
+                    <PrimaryButton className="w-full justify-center py-3" disabled={processing}>
+                        Ingresar
                     </PrimaryButton>
+
+                    {canResetPassword && (
+                        <div className="text-center">
+                            <Link
+                                href={route('password.request')}
+                                className="text-sm text-gray-500 hover:text-black transition-colors duration-200"
+                            >
+                                ¿Olvidaste tu contraseña?
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </form>
         </GuestLayout>
