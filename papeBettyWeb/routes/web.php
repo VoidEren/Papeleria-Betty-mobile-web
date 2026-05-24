@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ReporteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,9 +42,8 @@ Route::get('/store', function(){
     return Inertia::render('Store');
 })->middleware(['auth', 'verified'])->name('store');
 
-Route::get('/reportes', function(){
-    return Inertia::render('Reportes');
-})->middleware(['auth', 'verified'])->name('reportes');
+Route::get('/reportes', [ReporteController::class, 'index'])->middleware(['auth', 'verified'])->name('reportes');
+Route::get('/reportes/datos', [ReporteController::class, 'datos'])->middleware(['auth', 'verified'])->name('reportes.datos');
 
 Route::get('/clientes', function(){
     $clientes = App\Models\User::where('is_mobile_app', true)->get();

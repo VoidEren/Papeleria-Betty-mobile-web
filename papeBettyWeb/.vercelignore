@@ -10,3 +10,5 @@
 /.idea
 /.vscode
 /.phpunit.cache
+/public/hot
+/public/storage
