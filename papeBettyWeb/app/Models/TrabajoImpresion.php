@@ -24,13 +24,23 @@ class TrabajoImpresion extends Model
         'total',
         'estado',
         'notas',
+        'archivo_path',
+        'archivo_nombre',
+        'tipo_contenido',
+        'cobertura_real',
+        'recargo_imagen',
+        'pagado',
+        'pagado_at',
     ];
 
     protected $casts = [
         'precio_hoja_unit'  => 'decimal:4',
         'precio_tinta_unit' => 'decimal:4',
         'precio_por_hoja'   => 'decimal:4',
+        'recargo_imagen'    => 'decimal:4',
         'total'             => 'decimal:2',
+        'pagado'            => 'boolean',
+        'pagado_at'         => 'datetime',
     ];
 
     public function impresora(): BelongsTo

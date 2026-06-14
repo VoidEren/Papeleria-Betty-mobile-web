@@ -17,12 +17,15 @@ class Venta extends Model
         'total',
         'notas',
         'fecha_venta',
+        'fecha_recogida',
+        'metodo_pago',
     ];
 
     protected $casts = [
-        'fecha_venta' => 'datetime',
-        'subtotal'    => 'decimal:2',
-        'total'       => 'decimal:2',
+        'fecha_venta'    => 'datetime',
+        'fecha_recogida' => 'datetime',
+        'subtotal'       => 'decimal:2',
+        'total'          => 'decimal:2',
     ];
 
     public function user(): BelongsTo
@@ -33,6 +36,11 @@ class Venta extends Model
     public function detalles(): HasMany
     {
         return $this->hasMany(DetalleVenta::class);
+    }
+
+    public function pagos(): HasMany
+    {
+        return $this->hasMany(Pago::class);
     }
 
     /**
