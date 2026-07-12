@@ -195,7 +195,7 @@ export default function Dashboard({ trabajosPendientes = [], ventasPendientes = 
                                         </div>
                                         <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm h-48 bg-gray-100">
                                             <iframe
-                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.5645063071373!2d-99.0516094247844!3d19.500201181799292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1faf103fe3e57%3A0x97bbedb0c7d7ff7d!2sValle%20del%20Naktong%2C%20Valle%20de%20Aragon%203ra%20Secc%2C%2055280%20Ecatepec%20de%20Morelos%2C%20M%C3%A9x.!5e0!3m2!1ses-419!2smx!4v1718320000000!5m2!1ses-419!2smx"
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.611130635489!2d-99.05254882478446!3d19.498195081799986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1faf0ea546eef%3A0x391e63d3daacec8d!2sValle%20del%20Conchos%2044%2C%20Valle%20de%20Aragon%203ra%20Secc%2C%2055280%20Ecatepec%20de%20Morelos%2C%20M%C3%A9x.!5e0!3m2!1ses-419!2smx!4v1718320000000!5m2!1ses-419!2smx"
                                                 width="100%"
                                                 height="100%"
                                                 style={{ border: 0 }}
@@ -205,7 +205,7 @@ export default function Dashboard({ trabajosPendientes = [], ventasPendientes = 
                                             ></iframe>
                                         </div>
                                         <p className="text-xs text-gray-500 mt-2 text-center">
-                                            Valle del Naktong, Valle de Aragón 3ra Secc, 55280 Ecatepec de Morelos, Méx.
+                                            Valle del Conchos 44, Valle de Aragón 3ra Secc, 55280 Ecatepec de Morelos, Méx.
                                         </p>
                                     </div>
                                 </div>

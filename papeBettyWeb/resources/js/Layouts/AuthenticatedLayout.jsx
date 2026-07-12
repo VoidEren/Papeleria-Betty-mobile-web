@@ -16,43 +16,64 @@ import {
     ChatBubbleBottomCenterIcon,
     Cog6ToothIcon,
     ArrowRightOnRectangleIcon,
-    ChevronUpIcon
+    ChevronUpIcon,
+    Bars3Icon,
+    XMarkIcon
 } from '@heroicons/react/24/outline';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const [open, setOpen] = useState(true);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
         <div className="flex min-h-screen bg-gray-100">
 
+            {/* Backdrop overlay for mobile sidebar */}
+            {isMobileOpen && (
+                <div
+                    className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+                    onClick={() => setIsMobileOpen(false)}
+                />
+            )}
+
             {/* --- SIDEBAR --- */}
             <aside
-                className={`bg-white border-r overflow-y-auto overflow-x-hidden h-screen sticky top-0 z-40
-                transition-all duration-500 ease-in-out
-                ${open ? 'w-64' : 'w-20'} flex flex-col`}
+                className={`bg-white border-r overflow-y-auto overflow-x-hidden flex flex-col z-50
+                fixed inset-y-0 left-0 w-64 transform transition-transform duration-300 ease-in-out
+                ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
+                md:relative md:translate-x-0 md:h-screen md:sticky md:top-0
+                ${open ? 'md:w-64' : 'md:w-20'} md:transition-all md:duration-500 md:ease-in-out`}
             >
                 {/* Logo */}
                 <div className="flex items-center justify-between p-4 border-b">
-                    <Link href="/">
+                    <Link href="/" onClick={() => setIsMobileOpen(false)}>
                         <ApplicationLogo className="h-10 w-auto text-gray-800" />
                     </Link>
 
-                    {/* Botón abrir/cerrar con animación de giro */}
+                    {/* Desktop toggle button */}
                     <button
                         onClick={() => setOpen(!open)}
-                        className={`text-gray-500 hover:text-gray-700 text-xl px-1
+                        className={`hidden md:block text-gray-500 hover:text-gray-700 text-xl px-1
                             transition-transform duration-300
                             ${open ? 'rotate-0' : 'rotate-180'}
                         `}
                     >
                         {open ? '<' : '>'}
                     </button>
+
+                    {/* Mobile close button */}
+                    <button
+                        onClick={() => setIsMobileOpen(false)}
+                        className="block md:hidden p-1 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100"
+                    >
+                        <XMarkIcon className="w-6 h-6" />
+                    </button>
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 p-4 space-y-3">
+                <nav className="flex-1 p-4 space-y-3" onClick={() => setIsMobileOpen(false)}>
                     
                     {/* Dashboard */}
                     <NavLink
@@ -64,7 +85,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Dashboard
                         </span>
@@ -79,7 +100,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <CubeIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Inventario
                         </span>
@@ -94,7 +115,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <ClipboardDocumentListIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Productos
                         </span>
@@ -109,7 +130,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <PrinterIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Área Impresión
                         </span>
@@ -124,7 +145,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <CreditCardIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Pagos
                         </span>
@@ -139,7 +160,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <ShoppingCartIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Store
                         </span>
@@ -154,7 +175,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <DocumentCheckIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Reportes Generales
                         </span>
@@ -169,7 +190,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <ChatBubbleBottomCenterIcon className="w-6 h-6" />
                         <span
                             className={`transition-all duration-300 
-                            ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:-translate-x-5 md:absolute'}
                         `}>
                             Gestión de Clientes
                         </span>
@@ -272,17 +293,31 @@ export default function AuthenticatedLayout({ header, children }) {
             </aside>
 
             {/* --- MAIN CONTENT --- */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-w-0">
+
+                {/* Mobile Top Navbar */}
+                <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-30 shadow-sm">
+                    <button
+                        onClick={() => setIsMobileOpen(true)}
+                        className="p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                        <Bars3Icon className="w-6 h-6" />
+                    </button>
+                    <span className="font-semibold text-gray-800 text-lg">Pape Betty</span>
+                    <div className="w-6 h-6 flex items-center justify-center">
+                        {/* Placeholder balance/avatar or empty spacer to center title */}
+                    </div>
+                </div>
 
                 {header && (
-                    <header className="bg-white shadow sticky top-0 z-30">
+                    <header className="bg-white shadow md:sticky md:top-0 z-20">
                         <div className="px-6 py-4">
                             {header}
                         </div>
                     </header>
                 )}
 
-                <main className="p-6 flex-1">
+                <main className="p-4 md:p-6 flex-1">
                     {children}
                 </main>
             </div>

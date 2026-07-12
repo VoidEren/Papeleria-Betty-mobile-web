@@ -270,6 +270,10 @@ class ImpresionController extends Controller
             'descripcion'             => 'nullable|string',
         ]);
 
+        if (is_null($data['precio_tinta_color_base'])) {
+            $data['precio_tinta_color_base'] = 0.00;
+        }
+
         Impresora::create($data);
         return back()->with('success', 'Impresora agregada correctamente.');
     }
@@ -287,6 +291,10 @@ class ImpresionController extends Controller
             'descripcion'             => 'nullable|string',
         ]);
 
+        if (is_null($data['precio_tinta_color_base'])) {
+            $data['precio_tinta_color_base'] = 0.00;
+        }
+
         $impresora->update($data);
         return back()->with('success', 'Impresora actualizada correctamente.');
     }
@@ -302,20 +310,39 @@ class ImpresionController extends Controller
 
     public function scanPrinters()
     {
-        // Ejecutar comando PowerShell para listar impresoras en Windows
-        $output = shell_exec('powershell -Command "Get-Printer | Select-Object Name | ConvertTo-Json"');
         $printers = [];
 
-        if ($output) {
-            $data = json_decode($output, true);
-            if (is_array($data)) {
-                // ConvertTo-Json devuelve un solo objeto si hay 1 impresora, o un array si hay varias
-                if (isset($data['Name'])) {
-                    $printers[] = $data['Name'];
-                } else {
-                    foreach ($data as $printer) {
-                        if (isset($printer['Name'])) {
-                            $printers[] = $printer['Name'];
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // Windows: Ejecutar comando PowerShell para listar impresoras
+            $output = shell_exec('powershell -Command "Get-Printer | Select-Object Name | ConvertTo-Json"');
+            if ($output) {
+                $data = json_decode($output, true);
+                if (is_array($data)) {
+                    // ConvertTo-Json devuelve un solo objeto si hay 1 impresora, o un array si hay varias
+                    if (isset($data['Name'])) {
+                        $printers[] = $data['Name'];
+                    } else {
+                        foreach ($data as $printer) {
+                            if (isset($printer['Name'])) {
+                                $printers[] = $printer['Name'];
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // Linux / macOS: Usar lpstat -a para obtener las impresoras registradas en CUPS
+            $output = shell_exec('lpstat -a 2>/dev/null');
+            if ($output) {
+                $lines = explode("\n", trim($output));
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if (!empty($line)) {
+                        $parts = preg_split('/\s+/', $line);
+                        if (isset($parts[0]) && !empty($parts[0])) {
+                            // Reemplazar guiones bajos por espacios para una visualización más amigable si se prefiere,
+                            // o simplemente mantener el nombre técnico de CUPS.
+                            $printers[] = str_replace('_', ' ', $parts[0]);
                         }
                     }
                 }
