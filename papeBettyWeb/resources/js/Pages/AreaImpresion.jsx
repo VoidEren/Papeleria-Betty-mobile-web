@@ -89,10 +89,10 @@ function StatusBadge({ estado }) {
 
 function ModalPago({ trabajo, onClose }) {
     const { data, setData, post, processing, errors } = useForm({
-        metodo:          'tarjeta_debito',
-        ultimos_cuatro:  '',
-        banco:           '',
+        metodo:          'transferencia',
+        banco:           'BBVA (Carlos David)', // Cuenta de destino por defecto
         referencia:      '',
+        banco_origen:    '',
     });
 
     const submit = (e) => {
@@ -108,77 +108,71 @@ function ModalPago({ trabajo, onClose }) {
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fadeIn">
                 <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2">
-                        <CreditCardIcon className="w-6 h-6 text-indigo-600" />
-                        <h3 className="text-lg font-bold text-gray-900">Registrar Pago</h3>
+                        <BuildingLibraryIcon className="w-6 h-6 text-emerald-600" />
+                        <h3 className="text-lg font-bold text-gray-900">Registrar Pago (Transferencia)</h3>
                     </div>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
                         <XMarkIcon className="w-5 h-5" />
                     </button>
                 </div>
 
-                <div className="mb-4 p-3 bg-indigo-50 rounded-xl text-sm">
-                    <div className="text-gray-500">Cliente: <span className="font-semibold text-gray-900">{trabajo.cliente}</span></div>
-                    <div className="text-gray-500 mt-0.5">Total a cobrar: <span className="font-black text-emerald-600 text-lg">${Number(trabajo.total).toFixed(2)}</span></div>
+                <div className="mb-4 p-3 bg-emerald-50 rounded-xl text-sm border border-emerald-100/50">
+                    <div className="text-gray-600">Cliente: <span className="font-semibold text-gray-900">{trabajo.cliente}</span></div>
+                    <div className="text-gray-600 mt-0.5">Total a cobrar: <span className="font-black text-emerald-600 text-lg">${Number(trabajo.total).toFixed(2)}</span></div>
+                </div>
+
+                {/* Datos de la Cuenta de Destino */}
+                <div className="mb-4 p-3.5 bg-gray-50 rounded-xl text-xs space-y-2 border border-gray-150">
+                    <p className="font-bold text-gray-700 text-sm mb-1">Cuenta Receptora Oficial:</p>
+                    <div className="pb-1">
+                        <p className="font-semibold text-indigo-700 text-sm">BBVA Bancomer</p>
+                        <p className="text-gray-600 mt-1">Titular: <span className="font-semibold text-gray-800">Carlos David Moreno Escorza</span></p>
+                        <p className="text-gray-600 font-mono mt-0.5">Cuenta: <span className="font-bold text-gray-800">129 247 3135</span></p>
+                        <p className="text-gray-600 font-mono mt-0.5">CLABE: <span className="font-bold text-gray-800">012 180 01292473135 1</span></p>
+                        <p className="text-gray-600 font-mono mt-0.5">Tarjeta: <span className="font-bold text-gray-800">4152 3144 7373 8048</span></p>
+                    </div>
                 </div>
 
                 <form onSubmit={submit} className="space-y-4">
-                    {/* Método */}
+                    {/* Cuenta Destino */}
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Método de pago</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Cuenta de destino (Receptora)</label>
                         <select
-                            value={data.metodo}
-                            onChange={e => setData('metodo', e.target.value)}
-                            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none bg-gray-50"
+                            value={data.banco}
+                            onChange={e => setData('banco', e.target.value)}
+                            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-300 outline-none bg-gray-50"
                         >
-                            <option value="tarjeta_debito">Tarjeta Débito</option>
-                            <option value="tarjeta_credito">Tarjeta Crédito</option>
-                            <option value="transferencia">Transferencia</option>
+                            <option value="BBVA (Carlos David)">BBVA (Carlos David)</option>
                         </select>
+                        {errors.banco && <p className="text-red-500 text-xs mt-1">{errors.banco}</p>}
                     </div>
 
-                    {/* Tarjeta */}
-                    {(data.metodo === 'tarjeta_debito' || data.metodo === 'tarjeta_credito') && (
-                        <>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                                    Últimos 4 dígitos <span className="font-normal text-gray-400">(se mostrarán como **** **** **** XXXX)</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    maxLength={4}
-                                    placeholder="1234"
-                                    value={data.ultimos_cuatro}
-                                    onChange={e => setData('ultimos_cuatro', e.target.value.replace(/\D/g, ''))}
-                                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono focus:ring-2 focus:ring-indigo-300 outline-none bg-gray-50"
-                                />
-                                {errors.ultimos_cuatro && <p className="text-red-500 text-xs mt-1">{errors.ultimos_cuatro}</p>}
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1">Banco (opcional)</label>
-                                <input
-                                    type="text"
-                                    placeholder="BBVA, Banamex, HSBC..."
-                                    value={data.banco}
-                                    onChange={e => setData('banco', e.target.value)}
-                                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none bg-gray-50"
-                                />
-                            </div>
-                        </>
-                    )}
+                    {/* Referencia */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Referencia de transferencia</label>
+                        <input
+                            type="text"
+                            required
+                            placeholder="Número de folio o referencia"
+                            value={data.referencia}
+                            onChange={e => setData('referencia', e.target.value)}
+                            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono focus:ring-2 focus:ring-emerald-300 outline-none bg-gray-50"
+                        />
+                        {errors.referencia && <p className="text-red-500 text-xs mt-1">{errors.referencia}</p>}
+                    </div>
 
-                    {/* Transferencia */}
-                    {data.metodo === 'transferencia' && (
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1">Referencia de transferencia</label>
-                            <input
-                                type="text"
-                                placeholder="Número de referencia"
-                                value={data.referencia}
-                                onChange={e => setData('referencia', e.target.value)}
-                                className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono focus:ring-2 focus:ring-indigo-300 outline-none bg-gray-50"
-                            />
-                        </div>
-                    )}
+                    {/* Banco Origen */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Banco emisor / origen (opcional)</label>
+                        <input
+                            type="text"
+                            placeholder="Ej: Santander, Banamex, HSBC..."
+                            value={data.banco_origen}
+                            onChange={e => setData('banco_origen', e.target.value)}
+                            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-300 outline-none bg-gray-50"
+                        />
+                        {errors.banco_origen && <p className="text-red-500 text-xs mt-1">{errors.banco_origen}</p>}
+                    </div>
 
                     {errors.error && (
                         <p className="text-red-600 text-sm bg-red-50 rounded-xl px-3 py-2">{errors.error}</p>

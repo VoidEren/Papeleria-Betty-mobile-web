@@ -215,10 +215,10 @@ class ImpresionController extends Controller
     public function marcarPagado(Request $request, TrabajoImpresion $trabajo)
     {
         $data = $request->validate([
-            'metodo'         => 'required|in:tarjeta_debito,tarjeta_credito,transferencia',
-            'ultimos_cuatro' => 'nullable|string|size:4|regex:/^\d{4}$/',
-            'banco'          => 'nullable|string|max:100',
-            'referencia'     => 'nullable|string|max:255',
+            'metodo'       => 'required|in:transferencia',
+            'banco'        => 'required|string|max:100',          // Cuenta destino: BBVA o Banco Azteca
+            'referencia'   => 'required|string|max:255',          // Referencia requerida
+            'banco_origen' => 'nullable|string|max:100',         // Banco del cliente (opcional)
         ]);
 
         if ($trabajo->pagado) {
@@ -230,9 +230,10 @@ class ImpresionController extends Controller
             'venta_id'       => $trabajo->venta_id,
             'user_id'        => $trabajo->user_id,
             'metodo'         => $data['metodo'],
-            'ultimos_cuatro' => $data['ultimos_cuatro'] ?? null,
-            'banco'          => $data['banco'] ?? null,
-            'referencia'     => $data['referencia'] ?? null,
+            'ultimos_cuatro' => null,
+            'banco'          => $data['banco'],
+            'referencia'     => $data['referencia'],
+            'banco_origen'   => $data['banco_origen'] ?? null,
             'monto'          => $trabajo->total,
         ]);
 

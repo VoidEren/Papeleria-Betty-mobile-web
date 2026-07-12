@@ -12,6 +12,12 @@ export default function Productos({ productos }) {
     const [editMode, setEditMode] = useState(false);
     const [currentId, setCurrentId] = useState(null);
     const [previewProd, setPreviewProd] = useState(null);
+    const [buying, setBuying] = useState(false);
+    const [buyBanco, setBuyBanco] = useState('BBVA (Carlos David)');
+    const [buyReferencia, setBuyReferencia] = useState('');
+    const [buyBancoOrigen, setBuyBancoOrigen] = useState('');
+    const [buyError, setBuyError] = useState('');
+    const [isSubmittingBuy, setIsSubmittingBuy] = useState(false);
 
     const { data, setData, post, processing, errors, reset, clearErrors, progress } = useForm({
         nombre: '',
@@ -84,6 +90,35 @@ export default function Productos({ productos }) {
 
     const closePreview = () => {
         setPreviewProd(null);
+        setBuying(false);
+        setBuyReferencia('');
+        setBuyBancoOrigen('');
+        setBuyError('');
+        setIsSubmittingBuy(false);
+    };
+
+    const handleBuySubmit = (e) => {
+        e.preventDefault();
+        if (!buyReferencia) {
+            setBuyError('La referencia de transferencia es obligatoria.');
+            return;
+        }
+        setIsSubmittingBuy(true);
+        router.post(route('productos.comprar'), {
+            producto_id: previewProd.id,
+            banco: buyBanco,
+            referencia: buyReferencia,
+            banco_origen: buyBancoOrigen,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                closePreview();
+            },
+            onError: () => {
+                setBuyError('Error al registrar la compra. Inténtalo de nuevo.');
+                setIsSubmittingBuy(false);
+            }
+        });
     };
 
     return (
@@ -280,30 +315,118 @@ export default function Productos({ productos }) {
             <Modal show={!!previewProd} onClose={closePreview}>
                 {previewProd && (
                     <div className="bg-white rounded-lg overflow-hidden">
-                        {previewProd.imagen ? (
-                            <img src={'/storage/' + previewProd.imagen} alt={previewProd.nombre} className="w-full max-h-72 object-cover bg-gray-100" />
-                        ) : (
-                            <div className="w-full h-64 bg-gray-50 flex items-center justify-center border-b border-gray-100">
-                                <svg className="h-24 w-24 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                        )}
-                        <div className="p-8">
-                            <h2 className="text-3xl font-black text-gray-900 mb-4 capitalize">{previewProd.nombre}</h2>
-                            <p className="text-gray-600 text-base leading-relaxed mb-8 whitespace-pre-wrap">
-                                {previewProd.descripcion || 'Este producto no contiene una descripción elaborada.'}
-                            </p>
-                            
-                            <div className="flex items-center justify-between border-t border-gray-100 pt-6">
-                                <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Precio de venta</span>
-                                <span className="text-4xl font-extrabold text-emerald-600">${previewProd.precio}</span>
-                            </div>
+                        {buying ? (
+                            <form onSubmit={handleBuySubmit} className="p-8 space-y-5">
+                                <h3 className="text-xl font-bold text-gray-900">Comprar por Transferencia</h3>
+                                <p className="text-xs text-gray-500">
+                                    Transfiere el monto exacto a la siguiente cuenta oficial y registra la referencia de tu pago.
+                                </p>
+                                
+                                <div className="p-4 bg-indigo-50 rounded-xl text-xs space-y-1.5 border border-indigo-100">
+                                    <p className="font-bold text-indigo-800 text-sm">BBVA Bancomer</p>
+                                    <p className="text-gray-600">Titular: <span className="font-semibold text-gray-800">Carlos David Moreno Escorza</span></p>
+                                    <p className="text-gray-600 font-mono">Cuenta: <span className="font-bold text-gray-800">129 247 3135</span></p>
+                                    <p className="text-gray-600 font-mono">CLABE: <span className="font-bold text-gray-800">012 180 01292473135 1</span></p>
+                                    <p className="text-gray-600 font-mono">Tarjeta: <span className="font-bold text-gray-800">4152 3144 7373 8048</span></p>
+                                    <p className="text-emerald-700 font-black text-sm pt-2 border-t border-indigo-100 mt-2">
+                                        Monto a Transferir: ${Number(previewProd.precio).toFixed(2)}
+                                    </p>
+                                </div>
 
-                            <div className="mt-8 flex justify-end">
-                                <PrimaryButton className="px-8 py-3" onClick={closePreview}>Cerrar</PrimaryButton>
-                            </div>
-                        </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 mb-1">Cuenta de destino</label>
+                                        <select
+                                            value={buyBanco}
+                                            onChange={e => setBuyBanco(e.target.value)}
+                                            className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-300 outline-none bg-gray-50 font-medium"
+                                        >
+                                            <option value="BBVA (Carlos David)">BBVA (Carlos David)</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 mb-1">Referencia de Transferencia</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            placeholder="Ingresa el número de referencia"
+                                            value={buyReferencia}
+                                            onChange={e => setBuyReferencia(e.target.value)}
+                                            className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-emerald-300 outline-none bg-gray-50"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-700 mb-1">Banco emisor / origen (opcional)</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Ej: Santander, Banamex, HSBC..."
+                                            value={buyBancoOrigen}
+                                            onChange={e => setBuyBancoOrigen(e.target.value)}
+                                            className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-300 outline-none bg-gray-50"
+                                        />
+                                    </div>
+
+                                    {buyError && (
+                                        <p className="text-red-600 text-xs bg-red-50 rounded-xl px-3 py-2">{buyError}</p>
+                                    )}
+                                </div>
+
+                                <div className="flex gap-3 pt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setBuying(false)}
+                                        className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 text-sm transition"
+                                    >
+                                        Atrás
+                                    </button>
+                                    <PrimaryButton
+                                        type="submit"
+                                        className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 flex justify-center items-center text-sm font-bold"
+                                        disabled={isSubmittingBuy}
+                                    >
+                                        {isSubmittingBuy ? 'Procesando...' : 'Confirmar Pago'}
+                                    </PrimaryButton>
+                                </div>
+                            </form>
+                        ) : (
+                            <>
+                                {previewProd.imagen ? (
+                                    <img src={'/storage/' + previewProd.imagen} alt={previewProd.nombre} className="w-full max-h-72 object-cover bg-gray-100" />
+                                ) : (
+                                    <div className="w-full h-64 bg-gray-50 flex items-center justify-center border-b border-gray-100">
+                                        <svg className="h-24 w-24 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                )}
+                                <div className="p-8">
+                                    <h2 className="text-3xl font-black text-gray-900 mb-4 capitalize">{previewProd.nombre}</h2>
+                                    <p className="text-gray-600 text-base leading-relaxed mb-8 whitespace-pre-wrap">
+                                        {previewProd.descripcion || 'Este producto no contiene una descripción elaborada.'}
+                                    </p>
+                                    
+                                    <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+                                        <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Precio de venta</span>
+                                        <span className="text-4xl font-extrabold text-emerald-600">${previewProd.precio}</span>
+                                    </div>
+
+                                    <div className="mt-8 flex justify-between gap-3">
+                                        <PrimaryButton className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700" onClick={() => setBuying(true)}>
+                                            Comprar por Transferencia
+                                        </PrimaryButton>
+                                        <button 
+                                            type="button"
+                                            className="px-6 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50 font-bold rounded-xl transition text-sm" 
+                                            onClick={closePreview}
+                                        >
+                                            Cerrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
             </Modal>

@@ -80,6 +80,7 @@ Route::delete('/area-impresion/impresoras/{impresora}', [ImpresionController::cl
 
 Route::get('/pagos', [PagoController::class, 'index'])->middleware(['auth', 'verified'])->name('pagos');
 Route::post('/pagos', [PagoController::class, 'store'])->middleware(['auth', 'verified'])->name('pagos.store');
+Route::post('/productos/comprar', [PagoController::class, 'comprarProducto'])->middleware(['auth', 'verified'])->name('productos.comprar');
 
 Route::get('/store', function(){
     $ventas = App\Models\Venta::with(['user', 'detalles', 'pagos'])
