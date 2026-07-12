@@ -180,23 +180,22 @@ export default function Dashboard({ trabajosPendientes = [], ventasPendientes = 
                                         </div>
                                         <div>
                                             <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Atención a Clientes</div>
-                                            <a href="tel:+525512345678" className="text-lg font-bold text-gray-800 hover:text-indigo-600 transition">
-                                                +52 55 1234 5678
+                                            <a href="tel:+52 5511219555" className="text-lg font-bold text-gray-800 hover:text-indigo-600 transition">
+                                                +52 5511219555
                                             </a>
                                         </div>
                                     </div>
 
                                     <hr className="border-gray-100" />
 
-                                    {/* Mapa Placeholder */}
+                                    {/* Mapa */}
                                     <div>
                                         <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                                             <MapPinIcon className="w-4 h-4" /> Ubicación
                                         </div>
                                         <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm h-48 bg-gray-100">
-                                            {/* Iframe genérico de Google Maps apuntando a la CDMX como ejemplo */}
                                             <iframe
-                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d120401.44686411516!2d-99.21327140889045!3d19.43194098971761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ce0026db097507%3A0x54061076265ee841!2sCiudad%20de%20M%C3%A9xico%2C%20CDMX!5e0!3m2!1ses-419!2smx!4v1718320000000!5m2!1ses-419!2smx"
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.5645063071373!2d-99.0516094247844!3d19.500201181799292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1faf103fe3e57%3A0x97bbedb0c7d7ff7d!2sValle%20del%20Naktong%2C%20Valle%20de%20Aragon%203ra%20Secc%2C%2055280%20Ecatepec%20de%20Morelos%2C%20M%C3%A9x.!5e0!3m2!1ses-419!2smx!4v1718320000000!5m2!1ses-419!2smx"
                                                 width="100%"
                                                 height="100%"
                                                 style={{ border: 0 }}
@@ -206,7 +205,7 @@ export default function Dashboard({ trabajosPendientes = [], ventasPendientes = 
                                             ></iframe>
                                         </div>
                                         <p className="text-xs text-gray-500 mt-2 text-center">
-                                            Av. Principal #123, Ciudad de México, CDMX
+                                            Valle del Naktong, Valle de Aragón 3ra Secc, 55280 Ecatepec de Morelos, Méx.
                                         </p>
                                     </div>
                                 </div>
