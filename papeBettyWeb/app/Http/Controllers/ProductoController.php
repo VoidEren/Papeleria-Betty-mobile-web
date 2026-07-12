@@ -24,7 +24,7 @@ class ProductoController extends Controller
             'nombre' => 'required|string|max:255|unique:productos,nombre',
             'descripcion' => 'nullable|string',
             'precio' => ['required', 'numeric', 'min:0.01', 'regex:/^\d+(\.\d{1,2})?$/'],
-            'imagen' => 'nullable|image|max:2048',
+            'imagen' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'stock' => 'required|integer|min:0'
         ], [
             'nombre.unique' => 'El producto ya existe.'
@@ -46,7 +46,7 @@ class ProductoController extends Controller
             'nombre' => 'required|string|max:255|unique:productos,nombre,' . $producto->id,
             'descripcion' => 'nullable|string',
             'precio' => ['required', 'numeric', 'min:0.01', 'regex:/^\d+(\.\d{1,2})?$/'],
-            'imagen' => 'nullable|image|max:2048',
+            'imagen' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'stock' => 'required|integer|min:0'
         ], [
             'nombre.unique' => 'El producto ya existe.'
