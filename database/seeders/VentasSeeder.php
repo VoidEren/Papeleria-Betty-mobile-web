@@ -12,22 +12,22 @@ class VentasSeeder extends Seeder
 {
     public function run(): void
     {
-        // Obtener usuarios existentes (móviles o todos)
-        $usuarios = User::all();
+        // Obtener clientes de la app móvil para asociar las ventas
+        $usuarios = User::where('is_mobile_app', true)->get();
 
-        // Si no hay usuarios, crear algunos de demo
+        // Si no hay usuarios móviles, crear clientes demo
         if ($usuarios->isEmpty()) {
             $usuarios = collect([
                 User::create([
-                    'name'           => 'María García',
+                    'name'           => 'María García (Cliente Móvil)',
                     'email'          => 'maria@demo.com',
-                    'password'       => bcrypt('password'),
+                    'password'       => bcrypt(\Illuminate\Support\Str::random(32)),
                     'is_mobile_app'  => true,
                 ]),
                 User::create([
-                    'name'           => 'Juan Pérez',
+                    'name'           => 'Juan Pérez (Cliente Móvil)',
                     'email'          => 'juan@demo.com',
-                    'password'       => bcrypt('password'),
+                    'password'       => bcrypt(\Illuminate\Support\Str::random(32)),
                     'is_mobile_app'  => true,
                 ]),
             ]);

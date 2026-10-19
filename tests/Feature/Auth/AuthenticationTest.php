@@ -51,4 +51,36 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect('/');
     }
+
+    public function test_admin_can_authenticate_using_admin_at_papebetty_shorthand(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'admin@papebetty.com',
+            'is_mobile_app' => false,
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'admin@papebetty',
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_mobile_app_user_cannot_authenticate_to_admin_panel(): void
+    {
+        $mobileUser = User::factory()->create([
+            'email' => 'cliente@demo.com',
+            'is_mobile_app' => true,
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $mobileUser->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertSessionHasErrors('email');
+    }
 }

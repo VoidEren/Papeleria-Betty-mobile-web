@@ -12,23 +12,17 @@ export default function Welcome({ auth }) {
                     {auth.user ? (
                         <Link
                             href={route('dashboard')}
-                            className="text-sm font-medium text-gray-500 hover:text-black transition-colors duration-200"
+                            className="text-sm font-semibold text-gray-700 hover:text-black transition-colors duration-200"
                         >
-                            Dashboard
+                            Ir al Panel
                         </Link>
                     ) : (
-                        <div className="space-x-6 flex items-center">
+                        <div className="flex items-center">
                             <Link
                                 href={route('login')}
-                                className="text-sm font-medium text-gray-500 hover:text-black transition-colors duration-200"
+                                className="text-sm font-medium text-white bg-black hover:bg-gray-800 px-5 py-2.5 rounded-full transition-colors duration-200"
                             >
-                                Iniciar sesión
-                            </Link>
-                            <Link
-                                href={route('register')}
-                                className="text-sm font-medium text-black bg-gray-100 hover:bg-gray-200 px-5 py-2.5 rounded-full transition-colors duration-200"
-                            >
-                                Registrarse
+                                Acceso Administrativo
                             </Link>
                         </div>
                     )}
@@ -37,20 +31,23 @@ export default function Welcome({ auth }) {
                 {/* Main Content */}
                 <div className="flex flex-col items-center text-center max-w-2xl px-6">
                     <ApplicationLogo className="w-20 h-20 mb-8 text-black" />
-                    <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900 mb-6">
+                    <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full mb-3">
+                        Panel de Administración
+                    </span>
+                    <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-6">
                         Papelería Betty
                     </h1>
                     <p className="text-lg text-gray-500 font-light max-w-md mx-auto mb-10 leading-relaxed">
-                        Todo lo que necesitas para tu oficina y escuela, con la mejor calidad y servicio.
+                        Sistema integral de control de inventario, ventas, área de impresión y gestión para el administrador.
                     </p>
 
                     {!auth.user && (
                         <div className="flex space-x-4">
                             <Link
                                 href={route('login')}
-                                className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-colors duration-200"
+                                className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 shadow-md transition-colors duration-200"
                             >
-                                Iniciar sesión para continuar
+                                Iniciar sesión como Administrador
                             </Link>
                         </div>
                     )}

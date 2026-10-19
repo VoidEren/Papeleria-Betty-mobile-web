@@ -20,6 +20,20 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('email')) {
+            $email = trim((string) $this->input('email'));
+            if ($email === 'admin@papebetty') {
+                $email = 'admin@papebetty.com';
+            }
+            $this->merge(['email' => $email]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -46,6 +60,16 @@ class LoginRequest extends FormRequest
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Restringir el panel administrativo web exclusivamente al administrador (no clientes móviles)
+        if (Auth::user()?->is_mobile_app) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Acceso denegado. Este panel es exclusivo para el administrador.',
             ]);
         }
 

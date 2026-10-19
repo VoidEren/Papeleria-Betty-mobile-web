@@ -23,7 +23,7 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Acceso Administrativo" />
 
             {status && (
                 <div className="mb-4 text-sm font-medium text-green-600">
@@ -32,21 +32,22 @@ export default function Login({ status, canResetPassword }) {
             )}
 
             <div className="mb-10 text-center">
-                <h2 className="text-2xl font-light tracking-tight text-gray-900">Iniciar sesión</h2>
-                <p className="mt-2 text-sm text-gray-500">Bienvenido de nuevo a Papelería Betty</p>
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900">Panel Administrativo</h2>
+                <p className="mt-2 text-sm text-gray-500">Acceso exclusivo de gestión para Papelería Betty</p>
             </div>
 
             <form onSubmit={submit} className="space-y-6">
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Correo electrónico de Administrador" />
 
                     <TextInput
                         id="email"
-                        type="email"
+                        type="text"
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
+                        placeholder="admin@papebetty.com"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                     />
