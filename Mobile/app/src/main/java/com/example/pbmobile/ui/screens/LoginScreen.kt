@@ -1,6 +1,7 @@
 package com.example.pbmobile.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import com.example.pbmobile.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -125,24 +128,13 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Logo & Badge
-            Box(
+            Image(
+                painter = painterResource(id = R.drawable.icon_betty),
+                contentDescription = "Logo Papelería Betty",
                 modifier = Modifier
-                    .size(88.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(
-                            listOf(BettyPrimary, BettySecondary)
-                        )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.MenuBook,
-                    contentDescription = "Logo Papelería Betty",
-                    tint = Color.White,
-                    modifier = Modifier.size(46.dp)
-                )
-            }
+                    .size(110.dp)
+                    .clip(RoundedCornerShape(24.dp))
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 

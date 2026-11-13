@@ -48,8 +48,15 @@ export default function AuthenticatedLayout({ header, children }) {
             >
                 {/* Logo */}
                 <div className="flex items-center justify-between p-4 border-b">
-                    <Link href="/" onClick={() => setIsMobileOpen(false)}>
-                        <ApplicationLogo className="h-10 w-auto text-gray-800" />
+                    <Link href="/" onClick={() => setIsMobileOpen(false)} className="flex items-center gap-2.5 min-w-0">
+                        <ApplicationLogo className="h-11 w-11 flex-shrink-0" />
+                        <span
+                            className={`font-bold text-gray-800 text-base tracking-tight truncate transition-all duration-300
+                            ${open ? 'opacity-100 translate-x-0' : 'opacity-100 translate-x-0 md:opacity-0 md:w-0 md:overflow-hidden'}
+                        `}
+                        >
+                            Papelería Betty
+                        </span>
                     </Link>
 
                     {/* Desktop toggle button */}
@@ -303,7 +310,10 @@ export default function AuthenticatedLayout({ header, children }) {
                     >
                         <Bars3Icon className="w-6 h-6" />
                     </button>
-                    <span className="font-semibold text-gray-800 text-lg">Pape Betty</span>
+                    <div className="flex items-center gap-2">
+                        <ApplicationLogo className="h-8 w-8" />
+                        <span className="font-semibold text-gray-800 text-lg">Papelería Betty</span>
+                    </div>
                     <div className="w-6 h-6 flex items-center justify-center">
                         {/* Placeholder balance/avatar or empty spacer to center title */}
                     </div>

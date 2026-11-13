@@ -30,7 +30,7 @@ export default function Welcome({ auth }) {
 
                 {/* Main Content */}
                 <div className="flex flex-col items-center text-center max-w-2xl px-6">
-                    <ApplicationLogo className="w-20 h-20 mb-8 text-black" />
+                    <ApplicationLogo className="w-36 h-36 mb-6 drop-shadow-md" />
                     <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full mb-3">
                         Panel de Administración
                     </span>
